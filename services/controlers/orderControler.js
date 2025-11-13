@@ -1,8 +1,7 @@
 // controllers/stripeController.js
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); 
-const Payment = require('../models/Payment'); 
-const Order = require('../models/Order');     
-const User = require('../models/User');       
+const Payment = require('../models/paymentModels'); 
+const Order = require('../models/orderModels');     
 
 const createPaymentIntent = async (req, res) => {
   const { orderId, items, shippingAddress } = req.body; // أضفت shippingAddress
