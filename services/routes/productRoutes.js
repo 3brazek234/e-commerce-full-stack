@@ -6,7 +6,7 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controlers/productController");
-const { isAdmin } = require("../middlewares/admin");
+const  isAdmin  = require("../middlewares/admin");
 const multer = require("multer");
 
 const router = express.Router();

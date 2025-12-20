@@ -4,7 +4,7 @@ const { getAllCategories } = require("../controlers/categoryControler");
 const { createCategory } = require("../controlers/categoryControler");
 const { updateCategory } = require("../controlers/categoryControler");
 const { deleteCategory } = require("../controlers/categoryControler");
-const { isAdmin } = require("../middlewares/admin");
+const  isAdmin  = require("../middlewares/admin");
 router.get("/categories", getAllCategories);
 router.post("/categories", isAdmin, createCategory);
 router.put("/categories/:id", isAdmin, updateCategory);

@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  redis-app2:  
+    container_name: redis-app2  
+    image: redis:alpine         
+    restart: always
+    ports:
+      - "6381:6379"           
+    command: redis-server --loglevel warning
+    volumes:
+      - ./docker-volumes/cache-app2:/data 
+  rabbitmq:
+     container_name: rabbitmq_app2
+     image: rabbitmq:3.13-rc-management-alpine 
+     restart: always
+     environment:
+      - RABBITMQ_DEFAULT_USER=myuser
+      - RABBITMQ_DEFAULT_PASS=01065750357exxe
+     ports:
+      - "5673:5672"
+      - "15673:15672"
+     volumes:
+       - ./docker-volumes/rabbitmq-app2:/var/lib/rabbitmq
