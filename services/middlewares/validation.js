@@ -1,27 +1,26 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 
 const registerRules = () => {
   return [
-
-    body('name')
-      .notEmpty()
-      .withMessage('Name is required')
-      .trim()
-      .escape(),
-    body('email')
+    body("name").notEmpty().withMessage("Name is required").trim().escape(),
+    body("email")
       .isEmail()
-      .withMessage('Please provide a valid email')
-      .normalizeEmail(), 
-    body('password')
+      .withMessage("Please provide a valid email")
+      .normalizeEmail(),
+    body("password")
       .isLength({ min: 8 })
-      .withMessage('Password must be at least 8 characters long'),
+      .withMessage("Password must be at least 8 characters long"),
   ];
 };
-
+const createProduct = () => {
+  return [
+    body
+  ]
+};
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
-  
+
   if (errors.isEmpty()) {
     return next();
   }

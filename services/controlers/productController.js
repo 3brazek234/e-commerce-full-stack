@@ -1,4 +1,4 @@
-const cloudinary = require('../config/cloudinary');
+const cloudinary = require("../config/cloudinary");
 const Product = require("../models/productModels");
 
 const createProduct = async (req, res) => {
@@ -18,7 +18,6 @@ const createProduct = async (req, res) => {
       public_id: req.file.originalname.split(".")[0] + "-" + Date.now(),
     });
 
-    // 🚨🚨 هنا التعديل: إزاي تضيف الـ URL في الـ Array of Objects "images"
     const productData = {
       ...req.body,
       images: [{ url: cloudinaryResult.secure_url }],
@@ -96,52 +95,50 @@ const getProduct = async (req, res) => {
   }
 };
 const updateProduct = async (req, res) => {
-    try {
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        if (!product) {
-            return res.status(404).json({
-                status: "fail",
-                message: "Product not found",
-            });
-        }
-        res.status(200).json({
-            status: "success",
-            data: {
-                product,
-            },
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message,
-        });
+  try {
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!product) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Product not found",
+      });
     }
+    res.status(200).json({
+      status: "success",
+      data: {
+        product,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };
 const deleteProduct = async (req, res) => {
-    try {
-        const product = await Product.findByIdAndDelete(req.params.id);
-        if (!product) {
-            return res.status(404).json({
-                status: "fail",
-                message: "Product not found",
-            });
-        }
-        res.status(200).json({
-            status: "success",
-            data: {
-                product,
-            },
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message,
-        });
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Product not found",
+      });
     }
+    res.status(200).json({
+      status: "success",
+      data: {
+        product,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
 };
 module.exports = {
   getProduct,
