@@ -23,10 +23,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const payLoad = {
-      id: user._id,
-      email: user.email,
-    };
+  const payLoad = {
+  id: user._id,
+  email: user.email,
+  isAdmin: user.isAdmin 
+};
 
     const token = handleToken(payLoad);
 

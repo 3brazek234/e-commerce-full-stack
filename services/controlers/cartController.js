@@ -1,16 +1,15 @@
-const Cart = require("../models/Cart");
-const Product = require("../models/Product"); // هنحتاج Product Model
+const Cart = require("../models/cartModels");
+const Product = require("../models/productModels");
 
 const getOrCreateCart = async (req, res) => {
   try {
-    const userId = req.user.id; // 🚨🚨 نفترض إن الـ userId متاح من الـ authenticated user
-
+    const userId = req.user.token.id;
+    console.log("Decoded User Data:", req.user.token.id);
     let cart = await Cart.findOne({ user: userId }).populate(
       "products.product"
-    ); // 🚨🚨 Populate عشان نجيب تفاصيل المنتج
+    );
 
     if (!cart) {
-      // لو مفيش كارت للمستخدم ده، أنشئ واحدة جديدة
       cart = await Cart.create({ user: userId, products: [] });
     }
 

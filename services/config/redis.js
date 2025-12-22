@@ -6,4 +6,5 @@ redis.on("connect", () => {
 redis.on("error", (err) => {
   console.error("❌ Redis Connection Error:", err);
 });
-module.exports = redis;
+
+module.exports = { redis };

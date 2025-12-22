@@ -6,8 +6,9 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controlers/productController");
-const  isAdmin  = require("../middlewares/admin");
+const isAdmin = require("../middlewares/admin");
 const multer = require("multer");
+const { createProductValidator } = require("../middlewares/validation");
 
 const router = express.Router();
 
@@ -17,7 +18,12 @@ const upload = multer({ storage: storage });
 router.get("/products", getAllProducts);
 router.get("/products/:id", getProduct);
 
-router.post("/products", upload.single("image"), isAdmin, createProduct);
+router.post(
+  "/products",
+  upload.single("image"), 
+  createProductValidator,
+  createProduct           
+);
 router.put("/products/:id", isAdmin, updateProduct);
 router.delete("/products/:id", isAdmin, deleteProduct);
 module.exports = router;
