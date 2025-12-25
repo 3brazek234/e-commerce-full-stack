@@ -7,13 +7,10 @@ const {
   deleteProduct,
 } = require("../controlers/productController");
 const isAdmin = require("../middlewares/admin");
-const multer = require("multer");
 const { createProductValidator } = require("../middlewares/validation");
-
+const { upload } = require("../middlewares/upload");
 const router = express.Router();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 router.get("/products", getAllProducts);
 router.get("/products/:id", getProduct);

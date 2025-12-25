@@ -5,8 +5,10 @@ const { createCategory } = require("../controlers/categoryControler");
 const { updateCategory } = require("../controlers/categoryControler");
 const { deleteCategory } = require("../controlers/categoryControler");
 const  isAdmin  = require("../middlewares/admin");
+const { upload } = require("../middlewares/upload");
+
 router.get("/categories", getAllCategories);
-router.post("/categories", createCategory);
-router.put("/categories/:id", isAdmin, updateCategory);
+router.post("/categories", upload.single("image"), createCategory);
+router.put("/categories/:id", updateCategory);
 router.delete("/categories/:id", isAdmin, deleteCategory);
 module.exports = router;

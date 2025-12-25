@@ -22,9 +22,29 @@ const getAllCategories = async (req, res) => {
     });
   }
 };
-const createCategory = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
-    const newCategory = await Category.create(req.body);
+    if (!req.file) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Category image is required.",
+      });
+    }
+
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataUri = "data:" + req.file.mimetype + ";base64," + b64;
+
+    const cloudinaryResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "category_images",
+      public_id: req.file.originalname.split(".")[0] + "-" + Date.now(),
+    });
+
+    const categoryData = {
+      ...req.body,
+      image: cloudinaryResult.secure_url,
+    };
+    const newCategory = await Category.create(categoryData);
+
     res.status(201).json({
       status: "success",
       data: {
@@ -32,9 +52,10 @@ const createCategory = async (req, res) => {
       },
     });
   } catch (err) {
+    console.error("Error creating category:", err);
     res.status(400).json({
       status: "fail",
-      message: err.message,
+      message: err.message || "Failed to create category.",
     });
   }
 };

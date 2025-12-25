@@ -1,39 +1,33 @@
 const cloudinary = require("../config/cloudinary");
 const Product = require("../models/productModels");
 
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No image file uploaded.",
-      });
+      return res.status(400).json({ status: "fail", message: "No image file uploaded." });
     }
-
     const b64 = Buffer.from(req.file.buffer).toString("base64");
-    let dataUri = "data:" + req.file.mimetype + ";base64," + b64;
-
+    const dataUri = "data:" + req.file.mimetype + ";base64," + b64;
     const cloudinaryResult = await cloudinary.uploader.upload(dataUri, {
       folder: "product_images",
-      public_id: req.file.originalname.split(".")[0] + "-" + Date.now(),
+      public_id: req.file.originalname.split(".")[0] + "-" + Date.now(), 
     });
 
     const productData = {
       ...req.body,
-      images: [{ url: cloudinaryResult.secure_url }],
+      images: [{ url: cloudinaryResult.secure_url }], 
     };
 
     const newProduct = await Product.create(productData);
 
     res.status(201).json({
       status: "success",
-      data: {
-        product: newProduct,
-      },
+      data: { product: newProduct },
     });
+
   } catch (err) {
     console.error("Error creating product:", err);
-    res.status(400).json({
+    res.status(500).json({ 
       status: "fail",
       message: err.message || "Failed to create product.",
     });
