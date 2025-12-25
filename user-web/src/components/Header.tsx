@@ -1,18 +1,20 @@
+"use client";
 import Container from "./Container";
 import HeaderMenu from "./HeaderMenu";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import FavoriteButton from "./FavoriteButton";
-import SignIn from "./SignIn";
 import MobileMenu from "./MobileMenu";
-import { currentUser } from "@clerk/nextjs/server";
-import { ClerkLoaded, SignedIn, UserButton } from "@clerk/nextjs";
+import { AuthModal } from "./AuthModal";
+import { useAuth } from "@/context/AuthContext";
+import { UserNav } from "./UserNav";
 
-const Header = async () => {
-  const user = await currentUser();
-
+const Header = () => {
+    const { user } =  useAuth();
   return (
+          <>
+     
     <header className="sticky top-0 z-50 py-5 bg-white/70 backdrop-blur-md">
       <Container className="flex items-center justify-between text-lightColor">
         {/* logo */}
@@ -28,15 +30,17 @@ const Header = async () => {
           <CartIcon />
           <FavoriteButton />
 
-          <ClerkLoaded>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            {!user && <SignIn />}
-          </ClerkLoaded>
+          {
+            user ? (
+                <UserNav /> 
+              ) : (
+                <AuthModal />
+              )
+          }
         </div>
       </Container>
     </header>
+          </>
   );
 };
 export default Header;

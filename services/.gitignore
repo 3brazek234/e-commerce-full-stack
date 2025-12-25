@@ -1,2 +1,57 @@
-node_modules
+# ----------------------
+# Docker & Volumes (المهم ليك)
+# ----------------------
+# استبدل الاسماء دي بأسماء الفولدرات اللي انت كاتبها في docker-compose.yml
+mongo-data/
+postgres-data/
+mysql-data/
+cache-app2/
+rabbitmq-app2/
+dist/
+.docker/
+# لو عامل مجلد عام للداتا
+data/
+db/
+
+.next/
+out/
+build/
+dist/
+.vercel/
+
+# ----------------------
+# Dependencies
+# ----------------------
+node_modules/
+.pnp
+.pnp.js
+
+# ----------------------
+# Environment Variables (Security)
+# ----------------------
+# اوعى ترفع ملفات الـ env اللي فيها أسرار
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+!.env.example
+
+# ----------------------
+# Logs
+# ----------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# ----------------------
+# IDE & System Files
+# ----------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
