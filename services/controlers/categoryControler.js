@@ -1,4 +1,6 @@
 const Category = require("../models/categoryModels");
+const cloudinary = require("../config/cloudinary");
+
 const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
@@ -22,7 +24,7 @@ const getAllCategories = async (req, res) => {
     });
   }
 };
-export const createCategory = async (req, res) => {
+ const createCategory = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({

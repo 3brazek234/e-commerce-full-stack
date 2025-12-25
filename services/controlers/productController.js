@@ -1,7 +1,7 @@
 const cloudinary = require("../config/cloudinary");
 const Product = require("../models/productModels");
 
-export const createProduct = async (req, res) => {
+ const createProduct = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ status: "fail", message: "No image file uploaded." });
