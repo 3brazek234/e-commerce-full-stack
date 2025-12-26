@@ -1,54 +1,73 @@
-import Image from "next/image";
-import AddToWishllist from "./AddToWishllist";
-import Title from "./Text";
-import AddToCart from "./AddToCart";
-import type { Product } from "@/lib/types";
-import Container from "./Container";
-const ProductCard = ({ product }: { product: Product }) => {
-  // console.log("ProductCard", product);
+"use client";
+import { useState } from "react";
+import HomeTabs from "@/components/HomeTabs";
+import Container from "@/components/Container";
+import ProductCard from "@/components/ProductCard";
+import { motion, AnimatePresence } from "motion/react";
+import type { CategoryList, Product } from "@/lib/types"; // تأكد من المسار
+import useSWR from "swr";
+import HomeCategory from "./HomeCategory";
+import ShopByBrands from "./ShopByBrands";
+
+// 1. تصحيح تعريف الـ Type للـ Props
+interface ProductGridProps {
+  categories: CategoryList; // أو Category[] حسب تعريفك
+}
+
+const ProductGrid = ({ categories }: ProductGridProps) => {
+  const [selectedTab, setSelectedTab] = useState(categories[0]?.name || "All");
+
+  const apiUrl = selectedTab === "All" 
+    ? '/products' 
+    : `/products?category=${selectedTab}`;
+
+  const { data: products, isLoading } = useSWR(apiUrl);
+
   return (
-<Container>
-<div className=" text-sm border-[1px] border_dark_blue/20 rounder-md bg-white group ">
-      <div className="relative group overflow-hidden bg-shop_light_bg">
-        {product?.mainImageUrl && (
-          <Image
-            src={product?.mainImageUrl}
-            alt="productImage"
-            loading="lazy"
-            width={700}
-            height={700}
-            className={`w-full h-64 object-contain rounded-t-md group-hover:scale-105 bg-shop_light_bg overflow-hidden hoverEffect ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
-          />
+    <Container className="my-10">
+      <HomeTabs 
+        selectedTab={selectedTab} 
+        onTabSelect={setSelectedTab} 
+        categories={categories} 
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+        
+        {/* 4. حالة التحميل: عرض Skeleton */}
+        {
+        products && products.length > 0 ? (
+          <AnimatePresence mode="popLayout">
+            {products.map((product: Product) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                key={product._id} // 5. استخدم ID فريد مش index
+              >
+                <ProductCard product={product} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        ) : (
+          // 6. حالة عدم وجود منتجات (Empty State)
+          <div className="col-span-full text-center py-20 text-gray-500">
+            No products found in this category.
+          </div>
         )}
-        <AddToWishllist product={product} />
-      </div>
-      <div className="p-3">
-        <Title className="mt-2 text-lg font-semibold line-clamp-2">
-          {product.name}
-        </Title>
-        {/* price */}
-        <div className="flex items-center gap-2">
-          <p className="text-sm text-shop_light_text">price:</p>
-          <p className="text-sm text-shop_light_text">${product.price}</p>
-        </div>
-        {product.category && (
-          <p className="text-sm text-gray-500">Category: {product.category.categoryName}</p>
-        )}{" "}
-      </div>
-      <div className="flex items-center p-3 border-t border-gray-200">
-        <span className="text-sm text-gray-500">In Stock:</span>
-        <span
-          className={` ${product?.stock !== 0 ? "text-gray-500" : "text-red-500"} px-3`}
-        >
-          {product.stock}
-        </span>
       </div>
 
-      <div className="p-3 border-t border-gray-200 w-full">
-        <AddToCart product={product} className="w-full" />
+      <div className="flex justify-center mt-10">
+        <button className="px-6 py-2 bg-shop_light_green text-white rounded-md hover:bg-shop_light_green/90 transition-colors">
+          Load More
+        </button>
       </div>
-    </div>
-</Container>  
+      
+      <HomeCategory categories={categories} />
+      <ShopByBrands />
+    </Container>
   );
 };
-export default ProductCard;
+
+export default ProductGrid;
