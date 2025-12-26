@@ -4,10 +4,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "tahaapi.runasp.net", pathname: "/Products/**" },
-      { protocol: "https", hostname: "tahaapi.runasp.net", pathname: "/Icons/**" }, // لو عندك أيقونات
+      { protocol: "https", hostname: "tahaapi.runasp.net", pathname: "/Icons/**" }, {
+        protocol: "https",
+        hostname: "res.cloudinary.com", // ده الدومين بتاع كلاوديناري
+        pathname: "**", // يسمح بأي مسار جوه الدومين
+      },
     ],
-    // أو ببساطة ممكن:
-    // domains: ["tahaapi.runasp.net"],
+   
   },
 
   async rewrites() {

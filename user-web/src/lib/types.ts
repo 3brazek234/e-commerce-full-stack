@@ -19,12 +19,13 @@ export interface CategorySlug {
   current: string;
 }
 
-export interface Category {
-  categoryId: string;      
-  categoryName: string;   
-  icon: string;           
-}
 
+export type Category={
+  categoryId: string;      
+  name: string;
+  description: string;   
+  image: string;           
+}
 
 export type CategoryList = Category[];
 
